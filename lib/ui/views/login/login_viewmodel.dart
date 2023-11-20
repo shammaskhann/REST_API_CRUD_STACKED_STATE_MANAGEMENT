@@ -33,24 +33,19 @@ class LoginViewModel extends BaseViewModel {
         );
         if (response.statusCode == 200) {
           log(response.body);
-          Utils.snackBar(
-              'Congrats', 'Login Sucessfull', ContentType.success, context);
+          Utils.snackBar('Login Sucessfully', context);
           navigationService.navigateTo(Routes.homeView);
         } else {
           log(response.body);
-          Utils.snackBar('Error', 'Login Failed', ContentType.failure, context);
+          Utils.snackBar('Login Failed', context);
         }
       } catch (e) {
+        Utils.snackBar('Error: $e', context);
         log(e.toString());
       }
       return true;
     } else {
-      key.currentState!.showSnackBar(
-        const SnackBar(
-          content: Text('Please Enter Email and Password'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      Utils.snackBar('Enter Valid Email or Passowrd', context);
       return false;
     }
   }

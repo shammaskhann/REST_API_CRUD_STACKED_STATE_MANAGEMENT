@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:api_crud_app/ui/views/login/login_viewmodel.dart';
-import 'package:api_crud_app/ui/views/login/widget/CustomTextField.dart';
+import 'package:api_crud_app/ui/views/widgets/CustomTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';

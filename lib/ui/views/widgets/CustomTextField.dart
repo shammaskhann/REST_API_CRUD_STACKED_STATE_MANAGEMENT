@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-import '../login_viewmodel.dart';
+import '../login/login_viewmodel.dart';
 
-class CustomTextField extends ViewModelWidget<LoginViewModel> {
+class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final bool isObsecure;
@@ -14,7 +14,7 @@ class CustomTextField extends ViewModelWidget<LoginViewModel> {
       required this.isObsecure,
       this.togglePasswordVisibility});
   @override
-  Widget build(BuildContext context, LoginViewModel viewModel) {
+  Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       obscureText: isObsecure,
