@@ -36,7 +36,7 @@ class LoginViewModel extends BaseViewModel {
           log(response.body);
           Utils.snackBar('Login Sucessfully', context);
           prefs.setString('token', response.body);
-          navigationService.navigateTo(Routes.homeView);
+          navigationService.replaceWithHomeView();
         } else {
           log(response.body);
           Utils.snackBar('Login Failed', context);
