@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:api_crud_app/app/app.router.dart';
 import 'package:api_crud_app/ui/Utils/utils.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel extends BaseViewModel {
   final TextEditingController emailController = TextEditingController();
@@ -21,6 +21,7 @@ class LoginViewModel extends BaseViewModel {
   }
 
   login(key, context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       log('validate success');
       try {
@@ -34,6 +35,7 @@ class LoginViewModel extends BaseViewModel {
         if (response.statusCode == 200) {
           log(response.body);
           Utils.snackBar('Login Sucessfully', context);
+          prefs.setString('token', response.body);
           navigationService.navigateTo(Routes.homeView);
         } else {
           log(response.body);
