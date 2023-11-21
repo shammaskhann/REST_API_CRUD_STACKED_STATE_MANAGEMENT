@@ -1,36 +1,63 @@
-import 'package:api_crud_app/app/app.bottomsheets.dart';
-import 'package:api_crud_app/app/app.dialogs.dart';
+import 'dart:io';
 import 'package:api_crud_app/app/app.locator.dart';
-import 'package:api_crud_app/ui/common/app_strings.dart';
+import 'package:api_crud_app/models/UnicornModel.dart';
+import 'package:api_crud_app/services/PostRepository.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class HomeViewModel extends BaseViewModel {
+  final nameController = TextEditingController();
+  final ageController = TextEditingController();
+  final colourController = TextEditingController();
   final _dialogService = locator<DialogService>();
-  final _bottomSheetService = locator<BottomSheetService>();
+  PostRepository postRepository = PostRepository();
+  List<UnicornModel> unicorns = [];
 
-  String get counterLabel => 'Counter is: $_counter';
+  void clearText() {
+    nameController.clear();
+    ageController.clear();
+    colourController.clear();
+  }
 
-  int _counter = 0;
+  logout() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove('token');
+    exit(0);
+  }
 
-  void incrementCounter() {
-    _counter++;
+  getPost() async {
+    setBusy(true);
+    Future.delayed(const Duration(seconds: 2));
+    unicorns = await postRepository.getPosts();
+    setBusy(false);
     rebuildUi();
   }
 
-  void showDialog() {
-    _dialogService.showCustomDialog(
-      variant: DialogType.infoAlert,
-      title: 'Stacked Rocks!',
-      description: 'Give stacked $_counter stars on Github',
-    );
+  addPost() async {
+    setBusy(true);
+    await Future.delayed(const Duration(seconds: 2));
+    await postRepository.addPost(nameController.text,
+        int.parse(ageController.text), colourController.text);
+    await getPost();
+    clearText();
+    setBusy(false);
+    rebuildUi();
   }
 
-  void showBottomSheet() {
-    _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.notice,
-      title: ksHomeBottomSheetTitle,
-      description: ksHomeBottomSheetDescription,
-    );
+  //below code are in testing
+  updatePost(String id, String name, int age, String colour) async {
+    setBusy(true);
+    await postRepository.updatePost(id, name, age, colour);
+    await getPost();
+    setBusy(false);
+  }
+
+  deletePost(String id) async {
+    setBusy(true);
+    await postRepository.deletePost(id);
+    await getPost();
+    setBusy(false);
   }
 }
